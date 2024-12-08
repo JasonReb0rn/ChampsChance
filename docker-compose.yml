@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    env_file:
+      - .env
+    volumes:
+      - ./:/var/www/html
+      - ./articles:/var/www/html/articles
+    environment:
+      - PHP_ERROR_REPORTING=E_ALL
