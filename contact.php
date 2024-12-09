@@ -21,6 +21,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" charset="utf-8"></script>
     <script src="https://www.google.com/recaptcha/api.js?render=6LdCb70pAAAAAPWieAd9aQrzppc-Ha_SnhWoXptB"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2819146659782493"
+     crossorigin="anonymous"></script>
 </head>
 
 <body>
