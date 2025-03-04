@@ -57,6 +57,13 @@ body {
     background-color:  var(--body-bg-color);
 }
 
+.ad-wrapper {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    margin: 0 auto;
+}
+
 .content-container-solid {
     background: white;
     display: flex;
@@ -1214,7 +1221,7 @@ button:hover {
     }
 }
 
-@media (max-width: 725px) {
+@media (max-width: 728px) {
     .adopt-modal-body {
         max-width: unset;
         margin-left: unset;
@@ -2998,7 +3005,7 @@ box-shadow: 0px 0px 0px 3px rgba(0, 0, 0, 0.3);
 
 
 /* for mobile phones */
-@media screen and (max-width: 725px) {
+@media screen and (max-width: 728px) {
 
     h3 {
         font-size: 30px;

@@ -1,0 +1,14 @@
+# Deny access to dot files
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
+
+# Deny access to sensitive files
+<FilesMatch "\.(env|git|sql|lock|log|pem|key)$">
+    Require all denied
+</FilesMatch>
+
+# Additional security headers
+Header set X-Content-Type-Options "nosniff"
+Header set X-Frame-Options "DENY"
+Header set X-XSS-Protection "1; mode=block"

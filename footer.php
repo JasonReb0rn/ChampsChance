@@ -41,7 +41,7 @@
 
     <script>
         var year = new Date().getFullYear();
-        document.getElementById("current-year").textContent = "© " + year + " Champs Chance Inc.";
+        document.getElementById("current-year").textContent = "© " + year + " Champs Chance Inc..";
     </script>
 
 </footer>

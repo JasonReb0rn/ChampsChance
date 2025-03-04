@@ -1,16 +1,81 @@
 version: '3.8'
 
 services:
+  nginx-proxy:
+    image: nginxproxy/nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - certs:/etc/nginx/certs
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - ./nginx.conf:/etc/nginx/conf.d/custom.conf:ro
+    restart: always
+
+  letsencrypt:
+    image: nginxproxy/acme-companion
+    environment:
+      - DEFAULT_EMAIL=jasonchoate97@gmail.com
+    volumes:
+      - certs:/etc/nginx/certs
+      - vhost:/etc/nginx/vhost.d
+      - html:/usr/share/nginx/html
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - acme:/etc/acme.sh
+    volumes_from:
+      - nginx-proxy
+    depends_on:
+      - nginx-proxy
+    restart: always
+
   web:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "8080:80"
-    env_file:
-      - .env
-    volumes:
-      - ./:/var/www/html
-      - ./articles:/var/www/html/articles
+    expose:
+      - "80"
     environment:
-      - PHP_ERROR_REPORTING=E_ALL
+      - VIRTUAL_HOST=champschance.org,198.211.109.176
+      - LETSENCRYPT_HOST=champschance.org
+    volumes:
+      - ./.env.production:/var/www/html/.env:ro
+      - ./articles:/var/www/html/articles
+      - ./:/var/www/html
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0.40
+    platform: linux/amd64
+    expose:
+      - "3306"
+    env_file:
+      - .env.production
+    environment:
+      - MYSQL_DATABASE=champschance
+      - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    command: >
+      --default-authentication-plugin=mysql_native_password
+      --innodb-buffer-pool-size=64M
+      --innodb-log-file-size=16M
+      --max-allowed-packet=32M
+      --performance-schema=0
+    volumes:
+      - mysql_data:/var/lib/mysql
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+        reservations:
+          memory: 128M
+
+volumes:
+  mysql_data:
+  certs:
+  vhost:
+  html:
+  acme:

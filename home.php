@@ -21,8 +21,6 @@
     <link rel="icon" type="image/png" href="https://champschance.s3.us-east-2.amazonaws.com/assets/favicon-64.png" sizes="64x64">
     <link rel="icon" type="image/png" href="https://champschance.s3.us-east-2.amazonaws.com/assets/favicon-128.png" sizes="128x128">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2819146659782493"
-     crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -49,7 +47,6 @@
           <button class="see-dogs-carousel-btn" onclick="location.href='/adopt.php'"><i class="fa-solid fa-paw"></i>See our dogs now!</button>
         </div>
       </div>
-        
 
         <div class="content-block-flex-container">
           <div class="content-block-flex-photo">

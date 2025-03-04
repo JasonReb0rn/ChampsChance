@@ -7,7 +7,9 @@ let repliesData;
 // Wait for the DOM content to be fully loaded
 document.addEventListener("DOMContentLoaded", function() {
 
-    fetchPosts();
+    fetchPosts().then(() => {
+        drawCategories();
+    });
 
     var articleContainer = document.getElementById('blog-post-container');
     var postId = articleContainer.dataset.postId;
@@ -52,24 +54,34 @@ document.getElementById('search-bar').addEventListener('input', function () {
 
 // Function to fetch posts from server
 function fetchPosts() {
-    if (shouldFetchNewPostData()) {
-        console.log("Posts data not cached! Fetching new data.");
-        let xhr = new XMLHttpRequest();
-        xhr.open("GET", "../includes/get-blog-posts.inc.php", true);
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                // Store data and timestamp in local storage
-                localStorage.setItem('postsData', xhr.responseText);
-                localStorage.setItem('lastFetchTime', new Date().getTime().toString());
-                handlePostsData(xhr.responseText);
-            }
-        };
-        xhr.send();
-    } else {
-        // Use cached data
-        console.log("Using cached posts data.");
-        handlePostsData(localStorage.getItem('postsData'));
-    }
+    return new Promise((resolve, reject) => {
+        if (shouldFetchNewPostData()) {
+            console.log("Posts data not cached! Fetching new data.");
+            let xhr = new XMLHttpRequest();
+            // Check if we're in the articles directory
+            const isInArticlesDir = window.location.pathname.includes('/articles/');
+            const basePath = isInArticlesDir ? '../includes/' : 'includes/';
+            xhr.open("GET", basePath + "get-blog-posts.inc.php", true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        localStorage.setItem('postsData', xhr.responseText);
+                        localStorage.setItem('lastFetchTime', new Date().getTime().toString());
+                        handlePostsData(xhr.responseText);
+                        resolve();
+                    } else {
+                        console.error('Failed to fetch posts');
+                        reject(new Error('Failed to fetch posts'));
+                    }
+                }
+            };
+            xhr.send();
+        } else {
+            console.log("Using cached posts data.");
+            handlePostsData(localStorage.getItem('postsData'));
+            resolve();
+        }
+    });
 }
 
 // Helper function to check if data should be fetched
@@ -173,6 +185,12 @@ function drawComments() {
 
 
 function drawCategories() {
+
+    if (!postsData || !Array.isArray(postsData)) {
+        console.log("No posts data available for categories");
+        return;
+    }
+    
     const categoriesSet = new Set(); // Using a Set to automatically deduplicate categories
     postsData.forEach(post => {
         categoriesSet.add(post.category);

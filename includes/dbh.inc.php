@@ -8,9 +8,9 @@ if (file_exists(__DIR__ . '/../.env')) {
     $dotenv->load();
 }
 
-$serverName = "champschancedb.c7i33b1nzkaa.us-east-2.rds.amazonaws.com";
+$serverName = $_ENV['MYSQL_HOST'] ?? 'db';
 $dBUsername = "admin";
-$dBPassword = $_ENV['CC_RDS_PW'] ?? null;
+$dBPassword = $_ENV['MYSQL_PASSWORD'] ?? null;
 $dBName = "champschance";
 $dBPort = 3306;
 
